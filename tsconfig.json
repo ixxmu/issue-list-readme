@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
+    "module": "CommonJS",
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,

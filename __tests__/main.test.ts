@@ -1,7 +1,16 @@
-import { wait } from '../src/wait';
 import * as process from 'process';
 import * as cp from 'child_process';
 import * as path from 'path';
+
+function wait(duration: number) {
+  return new Promise((resolve, reject) => {
+    if (typeof duration !== 'number') {
+      reject(new Error('milliseconds not a number'));
+    } else {
+      setTimeout(resolve, duration);
+    }
+  })
+}
 
 test('throws invalid number', async () => {
   const input = parseInt('foo', 10);

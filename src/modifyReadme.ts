@@ -1,11 +1,16 @@
 import * as core from '@actions/core';
 import createTableContents from './createTableContents';
+import createTitleListContents from './createTitleListContents';
 import getContents from './getContents';
 import getIndices from './getIndices';
 
 const modifyReadme = async () => {
   try {
     const pattern = core.getInput('pattern');
+    /**
+     * 显示格式，支持两种，一种是Table布局，还有一种是标题链接列表(默认)
+     */
+    const layout = core.getInput('layout') as 'list' | 'table';
     const contents = await getContents();
 
     console.log('Contents has been retrieved.');
@@ -17,16 +22,19 @@ const modifyReadme = async () => {
       throw 'notValidIndexException';
     }
 
-    const beforeTable = contents.readme.substring(0, firstIndex);
-    const afterTable = contents.readme.substring(lastIndex);
+    const beforeContent = contents.readme.substring(0, firstIndex);
+    const afterContent = contents.readme.substring(lastIndex);
+    let insertContents = '';
 
-    console.log('Table wrapper has been identified.');
+    console.log('InsertContents has been identified.');
+    if (layout === 'table') {
+      insertContents = await createTableContents(contents.issues);
+    } else {
+      insertContents = await createTitleListContents(contents.issues);
+    }
+    console.log('InsertContents has been created.');
 
-    const table = await createTableContents(contents.issues);
-
-    console.log('Table has been created.');
-
-    return beforeTable + '\n\n' + table + '\n' + afterTable;
+    return beforeContent + '\n\n' + insertContents + '\n' + afterContent;
   } catch (error) {
     core.setFailed(error.message);
     throw error.message;

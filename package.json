@@ -5,7 +5,8 @@
   "description": "TypeScript template action",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "webpack",
+    "tsc": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
@@ -30,12 +31,18 @@
     "@actions/github": "^2.1.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/preset-typescript": "^7.13.0",
     "@octokit/action": "^2.0.3",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.7.12",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.8.0",
     "@zeit/ncc": "^0.20.5",
+    "babel-loader": "^8.2.2",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-github": "^2.0.0",
@@ -50,13 +57,13 @@
     "prettier": "^1.19.1",
     "tablemark": "^2.0.0",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.6.4",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": [
-        "lint-staged"
-      ]
+      "pre-commit": []
     }
   },
   "lint-staged": {
@@ -64,7 +71,6 @@
       "eslint"
     ],
     "./**/*.{js,ts,jsx,tsx,json,md}": [
-      "prettier --write",
       "git add"
     ]
   }

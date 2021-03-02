@@ -1,34 +1,14 @@
-import tablemark from 'tablemark';
 import * as core from '@actions/core';
-import extractBody from './extractBody';
+import { Octokit } from '@octokit/rest';
 
-const createTableContents = async (issues: any[]) => {
+const createTitleListContents = async (
+  issues: Octokit.IssuesListForRepoResponse
+) => {
   try {
-    /* 
-    const array = issues.map(async (item: any) => ({
-      title: `<a href="${item.html_url}">${item.title}</a>`,
-      status: item.state === 'open' ? ':eight_spoked_asterisk:' : ':no_entry:',
-      assignee: item.assignees.map(
-        (assignee: any) =>
-          `<a href="${assignee.html_url}"><img src="${assignee.avatar_url}" width="20" /></a>`
-      ),
-      body: await extractBody(item.body)
-    }));
-
-    const markDownText: string = tablemark(await Promise.all(array), {
-      columns: [
-        { align: 'left' },
-        { align: 'center' },
-        { align: 'center' },
-        { align: 'left' }
-      ]
+    const array = issues.map((item, index: number) => {
+      return `${index + 1}. [${item.title}](${item.html_url})`;
     });
-    */
-   const array = issues.map(async (item: any, index: number) => {
-     return `${index+1}. [${item.title}](${item.html_url})`;
-   });
-   const markDownText = array.join("\n");
-
+    const markDownText = array.join('\n');
 
     return markDownText;
   } catch (error) {
@@ -36,4 +16,4 @@ const createTableContents = async (issues: any[]) => {
     throw error.message;
   }
 };
-export default createTableContents;
+export default createTitleListContents;
