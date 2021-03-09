@@ -10,8 +10,8 @@ The issue list below...
 
 `list` style：
 
-1. more test
-2. test
+1. <a href="https://github.com/seed-of-apricot/issue-list-readme/issues/4">more test</a>
+2. <a href="https://github.com/seed-of-apricot/issue-list-readme/issues/2">test</a>
 
 or `table` style:
 
