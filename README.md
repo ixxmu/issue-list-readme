@@ -8,6 +8,13 @@ Display issues on the landing page :eyes:
 
 The issue list below...
 
+`list` style：
+
+1. more test
+2. test
+
+or `table` style:
+
 <!-- issueTableDemo -->
 
 | Title                                                                                 |         Status          |                                                            Assignee                                                             | Body                                  |
@@ -25,7 +32,7 @@ steps:
   - name: checkout
     uses: actions/checkout@v2
   - name: rewriteReadme
-    uses: seed-of-apricot/issue-list-readme@v1.1.0
+    uses: zhang0ZGC/issue-list-readme@master
     with:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       pattern: '<!-- issueTable -->' # suffixing "Demo" for this readme
@@ -93,9 +100,19 @@ Available variables are:
 | variable     | required | default                 | note                                                                               |
 | ------------ | -------- | ----------------------- | ---------------------------------------------------------------------------------- |
 | GITHUB_TOKEN | true     | -                       | you can use \${{ secrets.GITHUB_TOKEN }}                                           |
-| pattern      | false    | "\<!-- issueTable --\>" | the identifier to inject the issue table and <br /> extract the body of each issue |
-| labels       | false    | -                       | comma-separated labels to filter issues                                            |
-| state       | false    | "all"                       | state of the issues to filter them (`"all" \| "open" \| "closed"`)                                            |
+| layout       | true     | "list"                  | use list or the original table layout. One of `list` or `table`                           |
+| pattern      | false    | "\<!-- issueTable --\>" | the identifier to inject the issue list and <br /> extract the body of each issue  |
+| labels       | false    | -                       | comma-separated labels to filter issues.  Example: `bug,ui,@high`                  |
+| state        | false    | "all"                   | state of the issues to filter them. Can be either `open`, `closed`, or `all`.      |
+| creator      | false    | -                       | The user that created the issue.                                                   |
+| sort         | false    | -                       | What to sort results by. Can be either `created`, `updated`, `comments`.           |
+| direction    | false    | -                       | One of `asc` (ascending) or `desc` (descending)                                    |
+| since        | false    | -                       | Only show notifications updated after the given time. This is a timestamp in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ` .        |
+| per_page     | false    | -                       | Results per page (max 100).                                                        |
+| page         | false    | -                       | Page number of the results to fetch.                                               |
+| milestone    | false    | -                       | If an `integer` is passed, it should refer to a milestone by its `number` field. If the string `*` is passed, issues with any milestone are accepted. If the string `none` is passed, issues without milestones are returned. |
+
+> REF: https://docs.github.com/cn/rest/reference/issues#list-repository-issues
 
 ## Limitations
 
