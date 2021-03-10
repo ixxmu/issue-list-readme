@@ -10,8 +10,12 @@ The issue list below...
 
 `list` style：
 
+<!-- issueTableDemo -->
+
 1. <a href="https://github.com/seed-of-apricot/issue-list-readme/issues/4">more test</a>
 2. <a href="https://github.com/seed-of-apricot/issue-list-readme/issues/2">test</a>
+
+<!-- issueTableDemo -->
 
 or `table` style:
 
@@ -37,7 +41,7 @@ steps:
       GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       pattern: '<!-- issueTable -->' # suffixing "Demo" for this readme
       labels: 'good first issue'
-      labels: 'open'
+      state: 'open'
 # you need to add, commit and push here
 # otherwise the changes will not be pushed back into master
 ```
