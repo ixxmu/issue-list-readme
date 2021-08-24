@@ -45,7 +45,6 @@ const getContents = async () => {
     const repo = core.getInput('repo');
     if (repo) {
       const parts = repo.split('/');
-      console.log('[Error] Invalid param: repo.');
       if (parts.length === 2) {
         repository = {
           owner: parts[0],

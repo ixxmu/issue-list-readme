@@ -1186,7 +1186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _createTableContents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
 /* harmony import */ var _createTitleListContents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
-/* harmony import */ var _getContents__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
+/* harmony import */ var _getContents__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(99);
 /* harmony import */ var _getIndices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
 
 
@@ -2045,6 +2045,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2053,8 +2055,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 var createTitleListContents = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(issues) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(issues, options) {
     var array, markDownText;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
@@ -2062,7 +2065,24 @@ var createTitleListContents = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             array = issues.map(function (item, index) {
-              return "".concat(index + 1, ". [").concat(item.title, "](").concat(item.html_url, ")");
+              var mdStr = "".concat(index + 1, ". [").concat(item.title, "](").concat(item.html_url, ")");
+
+              if ((options === null || options === void 0 ? void 0 : options.showExtraLable) !== false) {
+                var commonLabels = (_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('labels') || '').split(',');
+                var labels = item.labels.filter(function (label) {
+                  return !commonLabels.includes(label.name);
+                });
+                var repo = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo;
+                var labelsMd = labels.map(function (label) {
+                  // https://github.com/atom/atom/labels/help-wanted
+                  var labelUrl = "https://github.com/".concat(repo.owner, "/").concat(repo.repo, "/labels/").concat(label.name); // ![GitHub labels](https://img.shields.io/github/labels/atom/atom/help-wanted)
+
+                  return "[![".concat(label.name, "](https://img.shields.io/github/labels/").concat(repo.owner, "/").concat(repo.repo, "/").concat(label.name, ")](").concat(labelUrl, ")");
+                }).join(' ');
+                mdStr += ' ' + labelsMd;
+              }
+
+              return mdStr;
             });
             markDownText = array.join('\n');
             return _context.abrupt("return", markDownText);
@@ -2081,7 +2101,7 @@ var createTitleListContents = /*#__PURE__*/function () {
     }, _callee, null, [[0, 6]]);
   }));
 
-  return function createTitleListContents(_x) {
+  return function createTitleListContents(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -2090,135 +2110,6 @@ var createTitleListContents = /*#__PURE__*/function () {
 
 /***/ }),
 /* 25 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-
-
-
-var getContents = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-    var token, queryArr, query, _i, _queryArr, key, value, octokit, repository, repo, parts, list, readme;
-
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            token = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('GITHUB_TOKEN');
-            queryArr = ['milestone', 'state', 'assignee', 'creator', 'mentioned', 'labels', 'sort', 'direction', 'since', 'per_page', 'page'];
-            query = {};
-            _i = 0, _queryArr = queryArr;
-
-          case 5:
-            if (!(_i < _queryArr.length)) {
-              _context.next = 15;
-              break;
-            }
-
-            key = _queryArr[_i];
-            value = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput(key);
-
-            if (value) {
-              _context.next = 10;
-              break;
-            }
-
-            return _context.abrupt("continue", 12);
-
-          case 10:
-            if (['per_page', 'page'].includes(key) && value) {
-              value = parseInt(value, 10);
-            } // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-
-
-            query[key] = value;
-
-          case 12:
-            _i++;
-            _context.next = 5;
-            break;
-
-          case 15:
-            octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(token);
-            console.log('GitHub client has been initialized.'); // https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context
-            // https://github.com/actions/toolkit/blob/main/packages/github/src/context.ts
-
-            repository = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
-            repo = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('repo');
-
-            if (repo) {
-              parts = repo.split('/');
-              console.log('[Error] Invalid param: repo.');
-
-              if (parts.length === 2) {
-                repository = {
-                  owner: parts[0],
-                  repo: parts[1]
-                };
-              }
-            }
-
-            _context.next = 22;
-            return octokit.issues.listForRepo(_objectSpread(_objectSpread({}, repository), query));
-
-          case 22:
-            list = _context.sent;
-            readme = (0,fs__WEBPACK_IMPORTED_MODULE_3__.readFileSync)('./README.md');
-            return _context.abrupt("return", {
-              issues: list.data,
-              readme: readme.toString()
-            });
-
-          case 27:
-            _context.prev = 27;
-            _context.t0 = _context["catch"](0);
-            _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(_context.t0.message);
-            throw _context.t0.message;
-
-          case 31:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, null, [[0, 27]]);
-  }));
-
-  return function getContents() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getContents);
-
-/***/ }),
-/* 26 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -2232,10 +2123,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // Originally pulled from https://github.com/JasonEtco/actions-toolkit/blob/master/src/github.ts
-const graphql_1 = __webpack_require__(27);
-const rest_1 = __webpack_require__(43);
-const Context = __importStar(__webpack_require__(90));
-const httpClient = __importStar(__webpack_require__(91));
+const graphql_1 = __webpack_require__(26);
+const rest_1 = __webpack_require__(42);
+const Context = __importStar(__webpack_require__(89));
+const httpClient = __importStar(__webpack_require__(90));
 // We need this in order to extend Octokit
 rest_1.Octokit.prototype = new rest_1.Octokit();
 exports.context = new Context.Context();
@@ -2332,7 +2223,7 @@ exports.GitHub = GitHub;
 //# sourceMappingURL=github.js.map
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2341,8 +2232,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "graphql": () => (/* binding */ graphql$1),
 /* harmony export */   "withCustomRequest": () => (/* binding */ withCustomRequest)
 /* harmony export */ });
-/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
+/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
 
 
 
@@ -2441,7 +2332,7 @@ function withCustomRequest(customRequest) {
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2449,11 +2340,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "request": () => (/* binding */ request)
 /* harmony export */ });
-/* harmony import */ var _octokit_endpoint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(40);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
-/* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
-/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
+/* harmony import */ var _octokit_endpoint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
+/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(41);
+/* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _octokit_request_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
 
 
 
@@ -2589,7 +2480,7 @@ const request = withDefaults(_octokit_endpoint__WEBPACK_IMPORTED_MODULE_3__.endp
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2634,7 +2525,7 @@ function isPlainObject(o) {
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2646,11 +2537,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Response": () => (/* binding */ Response),
 /* harmony export */   "FetchError": () => (/* binding */ FetchError)
 /* harmony export */ });
-/* harmony import */ var stream__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(32);
-/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(33);
-/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
-/* harmony import */ var zlib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var stream__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
+/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var https__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
+/* harmony import */ var zlib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(34);
 
 
 
@@ -4292,42 +4183,42 @@ fetch.Promise = global.Promise;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("stream");;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("http");;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("url");;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("https");;
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("zlib");;
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4335,8 +4226,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RequestError": () => (/* binding */ RequestError)
 /* harmony export */ });
-/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
-/* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
+/* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
 /* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(once__WEBPACK_IMPORTED_MODULE_0__);
 
 
@@ -4385,10 +4276,10 @@ class RequestError extends Error {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wrappy = __webpack_require__(38)
+var wrappy = __webpack_require__(37)
 module.exports = wrappy(once)
 module.exports.strict = wrappy(onceStrict)
 
@@ -4433,7 +4324,7 @@ function onceStrict (fn) {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ ((module) => {
 
 // Returns a wrapper function that returns a wrapped callback
@@ -4472,7 +4363,7 @@ function wrappy (fn, cb) {
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4499,7 +4390,7 @@ class Deprecation extends Error {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4507,8 +4398,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "endpoint": () => (/* binding */ endpoint)
 /* harmony export */ });
-/* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
+/* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var universal_user_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
 
 
 
@@ -4893,7 +4784,7 @@ const endpoint = withDefaults(null, DEFAULTS);
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4938,7 +4829,7 @@ function isPlainObject(o) {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4961,25 +4852,25 @@ function getUserAgent() {
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const { requestLog } = __webpack_require__(44);
+const { requestLog } = __webpack_require__(43);
 const {
   restEndpointMethods
-} = __webpack_require__(45);
+} = __webpack_require__(44);
 
-const Core = __webpack_require__(46);
+const Core = __webpack_require__(45);
 
 const CORE_PLUGINS = [
-  __webpack_require__(57),
-  __webpack_require__(66), // deprecated: remove in v17
+  __webpack_require__(56),
+  __webpack_require__(65), // deprecated: remove in v17
   requestLog,
-  __webpack_require__(71),
+  __webpack_require__(70),
   restEndpointMethods,
-  __webpack_require__(73),
+  __webpack_require__(72),
 
-  __webpack_require__(77) // deprecated: remove in v17
+  __webpack_require__(76) // deprecated: remove in v17
 ];
 
 const OctokitRest = Core.plugin(CORE_PLUGINS);
@@ -5010,7 +4901,7 @@ module.exports = Octokit;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5048,7 +4939,7 @@ requestLog.VERSION = VERSION;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5056,7 +4947,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "restEndpointMethods": () => (/* binding */ restEndpointMethods)
 /* harmony export */ });
-/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
 
 
 var endpointsByScope = {
@@ -11786,22 +11677,22 @@ restEndpointMethods.VERSION = VERSION;
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const factory = __webpack_require__(47);
+const factory = __webpack_require__(46);
 
 module.exports = factory();
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = factory;
 
-const Octokit = __webpack_require__(48);
-const registerPlugin = __webpack_require__(56);
+const Octokit = __webpack_require__(47);
+const registerPlugin = __webpack_require__(55);
 
 function factory(plugins) {
   const Api = Octokit.bind(null, plugins || []);
@@ -11811,15 +11702,15 @@ function factory(plugins) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = Octokit;
 
-const { request } = __webpack_require__(28);
-const Hook = __webpack_require__(49);
+const { request } = __webpack_require__(27);
+const Hook = __webpack_require__(48);
 
-const parseClientOptions = __webpack_require__(53);
+const parseClientOptions = __webpack_require__(52);
 
 function Octokit(plugins, options) {
   options = options || {};
@@ -11846,12 +11737,12 @@ function Octokit(plugins, options) {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var register = __webpack_require__(50)
-var addHook = __webpack_require__(51)
-var removeHook = __webpack_require__(52)
+var register = __webpack_require__(49)
+var addHook = __webpack_require__(50)
+var removeHook = __webpack_require__(51)
 
 // bind with array of arguments: https://stackoverflow.com/a/21792913
 var bind = Function.bind
@@ -11909,7 +11800,7 @@ module.exports.Collection = Hook.Collection
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ ((module) => {
 
 module.exports = register;
@@ -11942,7 +11833,7 @@ function register(state, name, method, options) {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ ((module) => {
 
 module.exports = addHook;
@@ -11994,7 +11885,7 @@ function addHook(state, kind, name, hook) {
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ ((module) => {
 
 module.exports = removeHook;
@@ -12019,16 +11910,16 @@ function removeHook(state, name, method) {
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = parseOptions;
 
-const { Deprecation } = __webpack_require__(39);
-const { getUserAgent } = __webpack_require__(54);
-const once = __webpack_require__(37);
+const { Deprecation } = __webpack_require__(38);
+const { getUserAgent } = __webpack_require__(53);
+const once = __webpack_require__(36);
 
-const pkg = __webpack_require__(55);
+const pkg = __webpack_require__(54);
 
 const deprecateOptionsTimeout = once((log, deprecation) =>
   log.warn(deprecation)
@@ -12114,7 +12005,7 @@ function parseOptions(options, log, hook) {
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -12136,19 +12027,19 @@ function getUserAgent() {
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = JSON.parse('{"name":"@octokit/rest","version":"16.43.2","publishConfig":{"access":"public"},"description":"GitHub REST API client for Node.js","keywords":["octokit","github","rest","api-client"],"author":"Gregor Martynus (https://github.com/gr2m)","contributors":[{"name":"Mike de Boer","email":"info@mikedeboer.nl"},{"name":"Fabian Jakobs","email":"fabian@c9.io"},{"name":"Joe Gallo","email":"joe@brassafrax.com"},{"name":"Gregor Martynus","url":"https://github.com/gr2m"}],"repository":"https://github.com/octokit/rest.js","dependencies":{"@octokit/auth-token":"^2.4.0","@octokit/plugin-paginate-rest":"^1.1.1","@octokit/plugin-request-log":"^1.0.0","@octokit/plugin-rest-endpoint-methods":"2.4.0","@octokit/request":"^5.2.0","@octokit/request-error":"^1.0.2","atob-lite":"^2.0.0","before-after-hook":"^2.0.0","btoa-lite":"^1.0.0","deprecation":"^2.0.0","lodash.get":"^4.4.2","lodash.set":"^4.3.2","lodash.uniq":"^4.5.0","octokit-pagination-methods":"^1.1.0","once":"^1.4.0","universal-user-agent":"^4.0.0"},"devDependencies":{"@gimenete/type-writer":"^0.1.3","@octokit/auth":"^1.1.1","@octokit/fixtures-server":"^5.0.6","@octokit/graphql":"^4.2.0","@types/node":"^13.1.0","bundlesize":"^0.18.0","chai":"^4.1.2","compression-webpack-plugin":"^3.1.0","cypress":"^4.0.0","glob":"^7.1.2","http-proxy-agent":"^4.0.0","lodash.camelcase":"^4.3.0","lodash.merge":"^4.6.1","lodash.upperfirst":"^4.3.1","lolex":"^6.0.0","mkdirp":"^1.0.0","mocha":"^7.0.1","mustache":"^4.0.0","nock":"^11.3.3","npm-run-all":"^4.1.2","nyc":"^15.0.0","prettier":"^1.14.2","proxy":"^1.0.0","semantic-release":"^17.0.0","sinon":"^8.0.0","sinon-chai":"^3.0.0","sort-keys":"^4.0.0","string-to-arraybuffer":"^1.0.0","string-to-jsdoc-comment":"^1.0.0","typescript":"^3.3.1","webpack":"^4.0.0","webpack-bundle-analyzer":"^3.0.0","webpack-cli":"^3.0.0"},"types":"index.d.ts","scripts":{"coverage":"nyc report --reporter=html && open coverage/index.html","lint":"prettier --check \'{lib,plugins,scripts,test}/**/*.{js,json,ts}\' \'docs/*.{js,json}\' \'docs/src/**/*\' index.js README.md package.json","lint:fix":"prettier --write \'{lib,plugins,scripts,test}/**/*.{js,json,ts}\' \'docs/*.{js,json}\' \'docs/src/**/*\' index.js README.md package.json","pretest":"npm run -s lint","test":"nyc mocha test/mocha-node-setup.js \\"test/*/**/*-test.js\\"","test:browser":"cypress run --browser chrome","build":"npm-run-all build:*","build:ts":"npm run -s update-endpoints:typescript","prebuild:browser":"mkdirp dist/","build:browser":"npm-run-all build:browser:*","build:browser:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json","build:browser:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map","generate-bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","update-endpoints":"npm-run-all update-endpoints:*","update-endpoints:fetch-json":"node scripts/update-endpoints/fetch-json","update-endpoints:typescript":"node scripts/update-endpoints/typescript","prevalidate:ts":"npm run -s build:ts","validate:ts":"tsc --target es6 --noImplicitAny index.d.ts","postvalidate:ts":"tsc --noEmit --target es6 test/typescript-validate.ts","start-fixtures-server":"octokit-fixtures-server"},"license":"MIT","files":["index.js","index.d.ts","lib","plugins"],"nyc":{"ignore":["test"]},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"bundlesize":[{"path":"./dist/octokit-rest.min.js.gz","maxSize":"33 kB"}]}');
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = registerPlugin;
 
-const factory = __webpack_require__(47);
+const factory = __webpack_require__(46);
 
 function registerPlugin(plugins, pluginFunction) {
   return factory(
@@ -12158,19 +12049,19 @@ function registerPlugin(plugins, pluginFunction) {
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationPlugin;
 
-const { createTokenAuth } = __webpack_require__(58);
-const { Deprecation } = __webpack_require__(39);
-const once = __webpack_require__(37);
+const { createTokenAuth } = __webpack_require__(57);
+const { Deprecation } = __webpack_require__(38);
+const once = __webpack_require__(36);
 
-const beforeRequest = __webpack_require__(59);
-const requestError = __webpack_require__(63);
-const validate = __webpack_require__(65);
-const withAuthorizationPrefix = __webpack_require__(61);
+const beforeRequest = __webpack_require__(58);
+const requestError = __webpack_require__(62);
+const validate = __webpack_require__(64);
+const withAuthorizationPrefix = __webpack_require__(60);
 
 const deprecateAuthBasic = once((log, deprecation) => log.warn(deprecation));
 const deprecateAuthObject = once((log, deprecation) => log.warn(deprecation));
@@ -12240,7 +12131,7 @@ function authenticationPlugin(octokit, options) {
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -12297,14 +12188,14 @@ const createTokenAuth = function createTokenAuth(token) {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationBeforeRequest;
 
-const btoa = __webpack_require__(60);
+const btoa = __webpack_require__(59);
 
-const withAuthorizationPrefix = __webpack_require__(61);
+const withAuthorizationPrefix = __webpack_require__(60);
 
 function authenticationBeforeRequest(state, options) {
   if (typeof state.auth === "string") {
@@ -12356,7 +12247,7 @@ function authenticationBeforeRequest(state, options) {
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ ((module) => {
 
 module.exports = function btoa(str) {
@@ -12365,12 +12256,12 @@ module.exports = function btoa(str) {
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = withAuthorizationPrefix;
 
-const atob = __webpack_require__(62);
+const atob = __webpack_require__(61);
 
 const REGEX_IS_BASIC_AUTH = /^[\w-]+:/;
 
@@ -12394,7 +12285,7 @@ function withAuthorizationPrefix(authorization) {
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ ((module) => {
 
 module.exports = function atob(str) {
@@ -12403,12 +12294,12 @@ module.exports = function atob(str) {
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationRequestError;
 
-const { RequestError } = __webpack_require__(64);
+const { RequestError } = __webpack_require__(63);
 
 function authenticationRequestError(state, error, options) {
   if (!error.headers) throw error;
@@ -12470,7 +12361,7 @@ function authenticationRequestError(state, error, options) {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -12478,8 +12369,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RequestError": () => (/* binding */ RequestError)
 /* harmony export */ });
-/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
-/* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+/* harmony import */ var deprecation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
+/* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
 /* harmony import */ var once__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(once__WEBPACK_IMPORTED_MODULE_0__);
 
 
@@ -12528,7 +12419,7 @@ class RequestError extends Error {
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ ((module) => {
 
 module.exports = validateAuth;
@@ -12555,19 +12446,19 @@ function validateAuth(auth) {
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationPlugin;
 
-const { Deprecation } = __webpack_require__(39);
-const once = __webpack_require__(37);
+const { Deprecation } = __webpack_require__(38);
+const once = __webpack_require__(36);
 
 const deprecateAuthenticate = once((log, deprecation) => log.warn(deprecation));
 
-const authenticate = __webpack_require__(67);
-const beforeRequest = __webpack_require__(68);
-const requestError = __webpack_require__(70);
+const authenticate = __webpack_require__(66);
+const beforeRequest = __webpack_require__(67);
+const requestError = __webpack_require__(69);
 
 function authenticationPlugin(octokit, options) {
   if (options.auth) {
@@ -12592,13 +12483,13 @@ function authenticationPlugin(octokit, options) {
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticate;
 
-const { Deprecation } = __webpack_require__(39);
-const once = __webpack_require__(37);
+const { Deprecation } = __webpack_require__(38);
+const once = __webpack_require__(36);
 
 const deprecateAuthenticate = once((log, deprecation) => log.warn(deprecation));
 
@@ -12650,13 +12541,13 @@ function authenticate(state, options) {
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationBeforeRequest;
 
-const btoa = __webpack_require__(60);
-const uniq = __webpack_require__(69);
+const btoa = __webpack_require__(59);
+const uniq = __webpack_require__(68);
 
 function authenticationBeforeRequest(state, options) {
   if (!state.auth.type) {
@@ -12699,7 +12590,7 @@ function authenticationBeforeRequest(state, options) {
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ ((module) => {
 
 /**
@@ -13601,12 +13492,12 @@ module.exports = uniq;
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = authenticationRequestError;
 
-const { RequestError } = __webpack_require__(64);
+const { RequestError } = __webpack_require__(63);
 
 function authenticationRequestError(state, error, options) {
   /* istanbul ignore next */
@@ -13662,12 +13553,12 @@ function authenticationRequestError(state, error, options) {
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = paginatePlugin;
 
-const { paginateRest } = __webpack_require__(72);
+const { paginateRest } = __webpack_require__(71);
 
 function paginatePlugin(octokit) {
   Object.assign(octokit, paginateRest(octokit));
@@ -13675,7 +13566,7 @@ function paginatePlugin(octokit) {
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -13813,12 +13704,12 @@ paginateRest.VERSION = VERSION;
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = octokitValidate;
 
-const validate = __webpack_require__(74);
+const validate = __webpack_require__(73);
 
 function octokitValidate(octokit) {
   octokit.hook.before("request", validate.bind(null, octokit));
@@ -13826,7 +13717,7 @@ function octokitValidate(octokit) {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -13834,9 +13725,9 @@ function octokitValidate(octokit) {
 
 module.exports = validate;
 
-const { RequestError } = __webpack_require__(64);
-const get = __webpack_require__(75);
-const set = __webpack_require__(76);
+const { RequestError } = __webpack_require__(63);
+const get = __webpack_require__(74);
+const set = __webpack_require__(75);
 
 function validate(octokit, options) {
   if (!options.request.validate) {
@@ -13984,7 +13875,7 @@ function validate(octokit, options) {
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ ((module) => {
 
 /**
@@ -14921,7 +14812,7 @@ module.exports = get;
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ ((module) => {
 
 /**
@@ -15917,30 +15808,30 @@ module.exports = set;
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = paginationMethodsPlugin
 
 function paginationMethodsPlugin (octokit) {
-  octokit.getFirstPage = __webpack_require__(78).bind(null, octokit)
-  octokit.getLastPage = __webpack_require__(83).bind(null, octokit)
-  octokit.getNextPage = __webpack_require__(84).bind(null, octokit)
-  octokit.getPreviousPage = __webpack_require__(85).bind(null, octokit)
-  octokit.hasFirstPage = __webpack_require__(86)
-  octokit.hasLastPage = __webpack_require__(87)
-  octokit.hasNextPage = __webpack_require__(88)
-  octokit.hasPreviousPage = __webpack_require__(89)
+  octokit.getFirstPage = __webpack_require__(77).bind(null, octokit)
+  octokit.getLastPage = __webpack_require__(82).bind(null, octokit)
+  octokit.getNextPage = __webpack_require__(83).bind(null, octokit)
+  octokit.getPreviousPage = __webpack_require__(84).bind(null, octokit)
+  octokit.hasFirstPage = __webpack_require__(85)
+  octokit.hasLastPage = __webpack_require__(86)
+  octokit.hasNextPage = __webpack_require__(87)
+  octokit.hasPreviousPage = __webpack_require__(88)
 }
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = getFirstPage
 
-const getPage = __webpack_require__(79)
+const getPage = __webpack_require__(78)
 
 function getFirstPage (octokit, link, headers) {
   return getPage(octokit, link, 'first', headers)
@@ -15948,14 +15839,14 @@ function getFirstPage (octokit, link, headers) {
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = getPage
 
-const deprecate = __webpack_require__(80)
-const getPageLinks = __webpack_require__(81)
-const HttpError = __webpack_require__(82)
+const deprecate = __webpack_require__(79)
+const getPageLinks = __webpack_require__(80)
+const HttpError = __webpack_require__(81)
 
 function getPage (octokit, link, which, headers) {
   deprecate(`octokit.get${which.charAt(0).toUpperCase() + which.slice(1)}Page() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
@@ -15992,7 +15883,7 @@ function applyAcceptHeader (res, headers) {
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ ((module) => {
 
 module.exports = deprecate
@@ -16010,7 +15901,7 @@ function deprecate (message) {
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ ((module) => {
 
 module.exports = getPageLinks
@@ -16031,7 +15922,7 @@ function getPageLinks (link) {
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ ((module) => {
 
 module.exports = class HttpError extends Error {
@@ -16052,12 +15943,12 @@ module.exports = class HttpError extends Error {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = getLastPage
 
-const getPage = __webpack_require__(79)
+const getPage = __webpack_require__(78)
 
 function getLastPage (octokit, link, headers) {
   return getPage(octokit, link, 'last', headers)
@@ -16065,12 +15956,12 @@ function getLastPage (octokit, link, headers) {
 
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = getNextPage
 
-const getPage = __webpack_require__(79)
+const getPage = __webpack_require__(78)
 
 function getNextPage (octokit, link, headers) {
   return getPage(octokit, link, 'next', headers)
@@ -16078,12 +15969,12 @@ function getNextPage (octokit, link, headers) {
 
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = getPreviousPage
 
-const getPage = __webpack_require__(79)
+const getPage = __webpack_require__(78)
 
 function getPreviousPage (octokit, link, headers) {
   return getPage(octokit, link, 'prev', headers)
@@ -16091,13 +15982,13 @@ function getPreviousPage (octokit, link, headers) {
 
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = hasFirstPage
 
-const deprecate = __webpack_require__(80)
-const getPageLinks = __webpack_require__(81)
+const deprecate = __webpack_require__(79)
+const getPageLinks = __webpack_require__(80)
 
 function hasFirstPage (link) {
   deprecate(`octokit.hasFirstPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
@@ -16106,13 +15997,13 @@ function hasFirstPage (link) {
 
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = hasLastPage
 
-const deprecate = __webpack_require__(80)
-const getPageLinks = __webpack_require__(81)
+const deprecate = __webpack_require__(79)
+const getPageLinks = __webpack_require__(80)
 
 function hasLastPage (link) {
   deprecate(`octokit.hasLastPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
@@ -16121,13 +16012,13 @@ function hasLastPage (link) {
 
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = hasNextPage
 
-const deprecate = __webpack_require__(80)
-const getPageLinks = __webpack_require__(81)
+const deprecate = __webpack_require__(79)
+const getPageLinks = __webpack_require__(80)
 
 function hasNextPage (link) {
   deprecate(`octokit.hasNextPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
@@ -16136,13 +16027,13 @@ function hasNextPage (link) {
 
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = hasPreviousPage
 
-const deprecate = __webpack_require__(80)
-const getPageLinks = __webpack_require__(81)
+const deprecate = __webpack_require__(79)
+const getPageLinks = __webpack_require__(80)
 
 function hasPreviousPage (link) {
   deprecate(`octokit.hasPreviousPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
@@ -16151,7 +16042,7 @@ function hasPreviousPage (link) {
 
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -16203,15 +16094,15 @@ exports.Context = Context;
 //# sourceMappingURL=context.js.map
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const http = __webpack_require__(32);
-const https = __webpack_require__(34);
-const pm = __webpack_require__(92);
+const http = __webpack_require__(31);
+const https = __webpack_require__(33);
+const pm = __webpack_require__(91);
 let tunnel;
 var HttpCodes;
 (function (HttpCodes) {
@@ -16630,7 +16521,7 @@ class HttpClient {
         if (useProxy) {
             // If using proxy, need tunnel
             if (!tunnel) {
-                tunnel = __webpack_require__(93);
+                tunnel = __webpack_require__(92);
             }
             const agentOptions = {
                 maxSockets: maxSockets,
@@ -16745,7 +16636,7 @@ exports.HttpClient = HttpClient;
 
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -16809,26 +16700,26 @@ exports.checkBypass = checkBypass;
 
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__(94);
+module.exports = __webpack_require__(93);
 
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
-var net = __webpack_require__(95);
-var tls = __webpack_require__(96);
-var http = __webpack_require__(32);
-var https = __webpack_require__(34);
-var events = __webpack_require__(97);
-var assert = __webpack_require__(98);
-var util = __webpack_require__(99);
+var net = __webpack_require__(94);
+var tls = __webpack_require__(95);
+var http = __webpack_require__(31);
+var https = __webpack_require__(33);
+var events = __webpack_require__(96);
+var assert = __webpack_require__(97);
+var util = __webpack_require__(98);
 
 
 exports.httpOverHttp = httpOverHttp;
@@ -17087,39 +16978,167 @@ exports.debug = debug; // for test
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("net");;
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("tls");;
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("events");;
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("assert");;
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("util");;
+
+/***/ }),
+/* 99 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+
+var getContents = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+    var token, queryArr, query, _i, _queryArr, key, value, octokit, repository, repo, parts, list, readme;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            token = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('GITHUB_TOKEN');
+            queryArr = ['milestone', 'state', 'assignee', 'creator', 'mentioned', 'labels', 'sort', 'direction', 'since', 'per_page', 'page'];
+            query = {};
+            _i = 0, _queryArr = queryArr;
+
+          case 5:
+            if (!(_i < _queryArr.length)) {
+              _context.next = 15;
+              break;
+            }
+
+            key = _queryArr[_i];
+            value = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput(key);
+
+            if (value) {
+              _context.next = 10;
+              break;
+            }
+
+            return _context.abrupt("continue", 12);
+
+          case 10:
+            if (['per_page', 'page'].includes(key) && value) {
+              value = parseInt(value, 10);
+            } // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+
+
+            query[key] = value;
+
+          case 12:
+            _i++;
+            _context.next = 5;
+            break;
+
+          case 15:
+            octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(token);
+            console.log('GitHub client has been initialized.'); // https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context
+            // https://github.com/actions/toolkit/blob/main/packages/github/src/context.ts
+
+            repository = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
+            repo = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('repo');
+
+            if (repo) {
+              parts = repo.split('/');
+
+              if (parts.length === 2) {
+                repository = {
+                  owner: parts[0],
+                  repo: parts[1]
+                };
+              }
+            }
+
+            _context.next = 22;
+            return octokit.issues.listForRepo(_objectSpread(_objectSpread({}, repository), query));
+
+          case 22:
+            list = _context.sent;
+            readme = (0,fs__WEBPACK_IMPORTED_MODULE_3__.readFileSync)('./README.md');
+            return _context.abrupt("return", {
+              issues: list.data,
+              readme: readme.toString()
+            });
+
+          case 27:
+            _context.prev = 27;
+            _context.t0 = _context["catch"](0);
+            _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(_context.t0.message);
+            throw _context.t0.message;
+
+          case 31:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 27]]);
+  }));
+
+  return function getContents() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getContents);
 
 /***/ })
 /******/ 	]);
